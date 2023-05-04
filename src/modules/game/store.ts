@@ -11,18 +11,14 @@ export interface GameState {
 
 export interface GameActions {
   reset: (width: number, height: number) => void;
-  getCell: (i: number, j: number) => Cell;
-  flipCell: (i: number, j: number) => void;
+  flipCell: (i: number) => void;
   flipAll: (flipped: boolean) => void;
 }
 
 export type GameSlice = GameState & GameActions;
 
-export const createGameStore: StateCreator<GameSlice> = (set, get) => ({
+export const createGameStore: StateCreator<GameSlice> = (set) => ({
   cells: [],
-  getCell: (i, j) => {
-    return get().cells[i * j];
-  },
   flipAll: (flipped: boolean) => {
     return set((state) => {
       return {
@@ -31,10 +27,10 @@ export const createGameStore: StateCreator<GameSlice> = (set, get) => ({
       };
     });
   },
-  flipCell: (i, j) => {
+  flipCell: (i) => {
     return set((state) => {
       const newCells = [...state.cells];
-      newCells[i * j].flipped = !newCells[i * j].flipped;
+      newCells[i].flipped = !newCells[i].flipped;
       return {
         ...state,
         cells: newCells,

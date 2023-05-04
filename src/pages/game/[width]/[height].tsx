@@ -2,7 +2,6 @@ import { useRouter } from "next/router";
 import { CSSProperties, useEffect } from "react";
 
 import { MainLayout } from "@/modules/common/ui/layouts/MainLayout";
-import { MAX_CARD_TYPES } from "@/modules/game/constants";
 import { useGameStore } from "@/modules/game/store";
 import { GameCard } from "@/modules/game/ui/GameCard";
 import { getValidBoardHeight, getValidBoardWidth } from "@/modules/game/utils";
@@ -18,7 +17,7 @@ export default function Game() {
   const boardWidth = width ? +width : 0;
   const boardHeight = height ? +height : 0;
 
-  const { cells, reset, flipAll } = useGameStore();
+  const { cells, reset, flipAll, flipCell } = useGameStore();
 
   useEffect(() => {
     const validWidth = getValidBoardWidth(boardWidth);
@@ -31,14 +30,16 @@ export default function Game() {
     start(5);
   }, [start]);
 
+  const isGameStarted = timeLeft === 0;
+
   // Flip all cards when initial timer reaches zero
   useEffect(() => {
-    if (timeLeft === 0) {
+    if (isGameStarted) {
       setTimeout(() => {
         flipAll(true);
       }, 1000);
     }
-  }, [timeLeft, flipAll]);
+  }, [isGameStarted, flipAll]);
 
   return (
     <MainLayout>
@@ -58,7 +59,15 @@ export default function Game() {
         }}
       >
         {cells.map((cell, i) => {
-          return <GameCard value={cell.value} flipped={cell.flipped} key={i} />;
+          return (
+            <button
+              disabled={!isGameStarted}
+              key={i}
+              onClick={() => flipCell(i)}
+            >
+              <GameCard value={cell.value} flipped={cell.flipped} />
+            </button>
+          );
         })}
       </div>
     </MainLayout>
