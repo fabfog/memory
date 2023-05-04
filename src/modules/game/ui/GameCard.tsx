@@ -8,16 +8,20 @@ import {
 
 export interface GameCardProps {
   value: number;
+  flipped: boolean;
 }
 
-export const GameCard: FC<GameCardProps> = ({ value }) => {
+export const GameCard: FC<GameCardProps> = ({ value, flipped }) => {
   return (
-    <Image
-      className="rounded-xl"
-      src={`https://placekitten.com/${DEFAULT_CARD_WIDTH}/${DEFAULT_CARD_HEIGHT}?image=${value}`}
-      width={DEFAULT_CARD_WIDTH}
-      height={DEFAULT_CARD_HEIGHT}
-      alt="kitten"
+    <div
+      className="rounded-xl bg-gradient-to-b from-primary to-slate-400"
+      style={{
+        width: DEFAULT_CARD_WIDTH,
+        height: DEFAULT_CARD_HEIGHT,
+        backgroundImage: flipped
+          ? undefined
+          : `url(https://placekitten.com/${DEFAULT_CARD_WIDTH}/${DEFAULT_CARD_HEIGHT}?image=${value})`,
+      }}
     />
   );
 };

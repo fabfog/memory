@@ -11,7 +11,7 @@ export default function Home() {
       <div className="flex flex-col gap-4">
         <div className="grid grid-cols-2 gap-4 max-w-fit mx-auto mb-8">
           {new Array(4).fill(0).map((_, i) => (
-            <GameCard value={i} key={i} />
+            <GameCard flipped={i % 3 === 0} value={i} key={i} />
           ))}
         </div>
 
