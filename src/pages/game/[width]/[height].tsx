@@ -11,8 +11,7 @@ export default function Game() {
   const router = useRouter();
   const { width, height } = router.query;
 
-  const error = !width || !height || !areBoardDimensionsValid(+width, +height);
-
+  const error = width && height && !areBoardDimensionsValid(+width, +height);
   const { cells, reset, flipAll, flipCell } = useGameStore();
 
   // sets board dimensions, initializing cells
@@ -50,17 +49,21 @@ export default function Game() {
 
   return (
     <MainLayout>
-      <span
-        className={`countdown font-mono text-6xl ${
+      <div
+        className={`font-mono text-center ${
           shouldHideTimer ? "invisible" : ""
         }`}
       >
-        {/* 
+        <p className="text-xl">GET READY!</p>
+        <span className="countdown text-6xl">
+          {/* 
           I added an explicit cast because TypeScript is not happy with --value
           TODO: find a cleaner solution
         */}
-        <span style={{ "--value": timeLeftToStart } as CSSProperties} />
-      </span>
+          <span style={{ "--value": timeLeftToStart } as CSSProperties} />
+        </span>
+      </div>
+
       {error && (
         <div className="sm:container alert alert-error shadow-lg">
           {/* TODO add more specific error message here */}
