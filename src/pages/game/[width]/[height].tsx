@@ -7,6 +7,7 @@ import { GameCard } from "@/modules/game/ui/GameCard";
 import { useCountdown } from "@/modules/common/hooks/useCountdown";
 import { areBoardDimensionsValid } from "@/modules/game/utils";
 import Link from "next/link";
+import Image from "next/image";
 
 export default function Game() {
   const router = useRouter();
@@ -97,13 +98,20 @@ export default function Game() {
   const canFlipCards = isGameStarted && !isFlippingDisabled;
   const shouldHideTimer = isGameStarted || error;
 
-  const hasCompletedGame = true || isGameComplete();
+  const hasCompletedGame = isGameComplete();
   if (hasCompletedGame) {
     return (
       <MainLayout>
         <h1 className="text-3xl uppercase mb-8">Congratulations!</h1>
-        <div className="flex flex-col justify-center items-center gap-6">
-          <h2 className="text-4xl">
+        <div className="flex flex-col justify-center items-center gap-8">
+          <Image
+            src="https://placekitten.com/g/300/300"
+            alt="success"
+            width={300}
+            height={300}
+            className="rounded-xl"
+          />
+          <h2 className="text-4xl text-center">
             You won the game in{" "}
             <span className="font-bold">{moves.length} moves</span>!
           </h2>
@@ -171,6 +179,9 @@ export default function Game() {
           );
         })}
       </div>
+      <Link href="/" className="btn btn-lg btn-outline text-xl my-8">
+        &#x2190; Back
+      </Link>
     </MainLayout>
   );
 }

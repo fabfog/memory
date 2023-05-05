@@ -12,20 +12,20 @@ import {
 } from "@/modules/game/constants";
 
 import { MainLayout } from "@/modules/common/ui/layouts/MainLayout";
-import { areBoardDimensionsValid } from "@/modules/game/utils";
 import {
   GameOptionsForm,
   useGameOptionsForm,
 } from "@/modules/game/hooks/useGameOptionsForm";
 import { TextInput } from "@/modules/common/ui/form/TextInput";
+import { areBoardDimensionsValid } from "@/modules/game/utils";
 
 export default function Options() {
   const {
-    watch,
     control,
     setValue,
     handleSubmit,
-    formState: { isValid, isDirty },
+    watch,
+    formState: { isValid },
   } = useGameOptionsForm();
 
   // load previously saved values from localStorage
@@ -51,6 +51,11 @@ export default function Options() {
 
   const [boardWidth, boardHeight] = watch(["boardWidth", "boardHeight"]);
 
+  const shouldShowDimensionsError = !areBoardDimensionsValid(
+    boardWidth,
+    boardHeight
+  );
+
   return (
     <MainLayout>
       <h1 className="text-3xl uppercase mb-8">Options</h1>
@@ -61,36 +66,42 @@ export default function Options() {
             name="boardWidth"
             label="width"
             control={control}
-            controllerProps={{
-              rules: {
-                required: true,
-                min: MIN_BOARD_WIDTH,
-                max: MAX_BOARD_WIDTH,
-              },
+            inputProps={{
+              required: true,
+              min: MIN_BOARD_WIDTH,
+              max: MAX_BOARD_WIDTH,
+              type: "number",
             }}
           />
           <TextInput
             name="boardHeight"
             label="height"
             control={control}
-            controllerProps={{
-              rules: {
-                required: true,
-                min: MIN_BOARD_HEIGHT,
-                max: MAX_BOARD_HEIGHT,
-                validate: () =>
-                  areBoardDimensionsValid(boardWidth, boardHeight),
-              },
+            inputProps={{
+              min: MIN_BOARD_HEIGHT,
+              max: MAX_BOARD_HEIGHT,
+              required: true,
+              type: "number",
             }}
           />
+
+          <div
+            className={`sm:container alert alert-error shadow-lg ${
+              shouldShowDimensionsError ? "" : "invisible"
+            }`}
+          >
+            <span className="text-lg">
+              Board width and height cannot be both odd
+            </span>
+          </div>
         </div>
-        <div className="flex flex-col sm:flex-row gap-4 mt-8">
+        <div className="flex justify-center gap-4 mt-8">
           <Link href="/" className="btn btn-lg btn-outline text-xl btn-accent">
             &#x2190; Back
           </Link>
           <button
             type="submit"
-            disabled={!isValid || !isDirty}
+            disabled={!isValid}
             className={`btn btn-lg text-xl btn-primary ${
               isValid ? "" : "btn-disabled"
             }`}

@@ -1,3 +1,4 @@
+import { DetailedHTMLProps, HTMLAttributes, InputHTMLAttributes } from "react";
 import {
   Control,
   Controller,
@@ -10,6 +11,10 @@ export interface TextInputProps<T extends FieldValues> {
   label: string;
   name: Path<T>;
   control: Control<T>;
+  inputProps?: Partial<
+    DetailedHTMLProps<HTMLAttributes<HTMLInputElement>, HTMLInputElement>
+  > &
+    InputHTMLAttributes<HTMLInputElement>;
   controllerProps?: Omit<
     Partial<ControllerProps<T>>,
     "name" | "render" | "control"
@@ -20,6 +25,7 @@ export function TextInput<T extends FieldValues>({
   control,
   label,
   name,
+  inputProps,
   controllerProps,
 }: TextInputProps<T>) {
   return (
@@ -32,9 +38,9 @@ export function TextInput<T extends FieldValues>({
           <label className="input-group">
             <span className="uppercase">{label}</span>
             <input
-              type="number"
               className="input input-bordered input-lg"
               {...field}
+              {...inputProps}
             />
           </label>
           <label className="label">
