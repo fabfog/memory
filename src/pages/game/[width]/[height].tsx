@@ -4,23 +4,23 @@ import { CSSProperties, useEffect, useState } from "react";
 import { MainLayout } from "@/modules/common/ui/layouts/MainLayout";
 import { useGameStore } from "@/modules/game/store";
 import { GameCard } from "@/modules/game/ui/GameCard";
-import { getValidBoardHeight, getValidBoardWidth } from "@/modules/game/utils";
 import { useCountdown } from "@/modules/common/hooks/useCountdown";
+import { areBoardDimensionsValid } from "@/modules/game/utils";
 
 export default function Game() {
   const router = useRouter();
   const { width, height } = router.query;
-  const boardWidth = width ? +width : 0;
-  const boardHeight = height ? +height : 0;
+
+  const error = !width || !height || !areBoardDimensionsValid(+width, +height);
 
   const { cells, reset, flipAll, flipCell } = useGameStore();
 
   // sets board dimensions, initializing cells
   useEffect(() => {
-    const validWidth = getValidBoardWidth(boardWidth);
-    const validHeight = getValidBoardHeight(boardHeight);
-    reset(validWidth, validHeight);
-  }, [boardWidth, boardHeight, reset]);
+    if (!error && width && height) {
+      reset(+width, +height);
+    }
+  }, [width, height, reset, error]);
 
   const { start: startInitialCountdown, timeLeft: timeLeftToStart } =
     useCountdown();
@@ -46,12 +46,13 @@ export default function Game() {
   const [isFlippingDisabled, setIsFlippingDisabled] = useState(false);
 
   const canFlipCards = isGameStarted && !isFlippingDisabled;
+  const shouldHideTimer = isGameStarted || error;
 
   return (
     <MainLayout>
       <span
         className={`countdown font-mono text-6xl ${
-          isGameStarted ? "invisible" : ""
+          shouldHideTimer ? "invisible" : ""
         }`}
       >
         {/* 
@@ -60,12 +61,18 @@ export default function Game() {
         */}
         <span style={{ "--value": timeLeftToStart } as CSSProperties} />
       </span>
+      {error && (
+        <div className="sm:container alert alert-error shadow-lg">
+          {/* TODO add more specific error message here */}
+          <span className="text-lg">Error! Could not start game.</span>
+        </div>
+      )}
       <div
         style={{
           margin: "auto 0",
           display: "grid",
           gap: "1rem",
-          gridTemplateColumns: `repeat(${boardWidth}, 1fr)`,
+          gridTemplateColumns: `repeat(${width}, 1fr)`,
         }}
       >
         {cells.map((cell, i) => {

@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect } from "react";
 
 import {
   MIN_BOARD_WIDTH,
@@ -12,76 +12,93 @@ import {
 
 import { MainLayout } from "@/modules/common/ui/layouts/MainLayout";
 import { useRouter } from "next/router";
-import { getValidBoardHeight, getValidBoardWidth } from "@/modules/game/utils";
+import { areBoardDimensionsValid } from "@/modules/game/utils";
+import {
+  GameOptionsForm,
+  useGameOptionsForm,
+} from "@/modules/game/hooks/useGameOptionsForm";
+import { TextInput } from "@/modules/common/ui/form/TextInput";
 
 export default function Home() {
-  const [width, setWidth] = useState(0);
-  const [height, setHeight] = useState(0);
+  const {
+    watch,
+    control,
+    setValue,
+    handleSubmit,
+    formState: { isValid, isDirty },
+  } = useGameOptionsForm();
 
+  // load previously saved values from localStorage
   useEffect(() => {
-    setWidth(
-      getValidBoardWidth(+(localStorage.getItem(LS_OPTIONS_WIDTH_KEY) ?? 0))
-    );
-    setHeight(
-      getValidBoardHeight(+(localStorage.getItem(LS_OPTIONS_HEIGHT_KEY) ?? 0))
-    );
-  }, []);
+    const savedWidth = localStorage.getItem(LS_OPTIONS_WIDTH_KEY);
+    const savedHeight = localStorage.getItem(LS_OPTIONS_HEIGHT_KEY);
+    if (savedWidth) setValue("boardWidth", +savedWidth);
+    if (savedHeight) setValue("boardHeight", +savedHeight);
+  }, [setValue]);
 
   const router = useRouter();
 
-  // Very naive handling of options, but for this simple app it will be enough
-  const onSubmit = useCallback(() => {
-    localStorage.setItem(
-      LS_OPTIONS_WIDTH_KEY,
-      getValidBoardWidth(width).toString()
-    );
-    localStorage.setItem(
-      LS_OPTIONS_HEIGHT_KEY,
-      getValidBoardHeight(height).toString()
-    );
-    router.push("/");
-  }, [width, height, router]);
+  const onSubmit = useCallback(
+    ({ boardWidth, boardHeight }: GameOptionsForm) => {
+      // save options to localStorage
+      localStorage.setItem(LS_OPTIONS_WIDTH_KEY, boardWidth.toString());
+      localStorage.setItem(LS_OPTIONS_HEIGHT_KEY, boardHeight.toString());
+      // go back to main page
+      router.push("/");
+    },
+    [router]
+  );
+
+  const [boardWidth, boardHeight] = watch(["boardWidth", "boardHeight"]);
 
   return (
     <MainLayout>
       <h1 className="text-3xl uppercase mb-8">Options</h1>
-      <div className="flex flex-col gap-4 items-center">
-        <p className="text-xl">Grid dimensions</p>
-        <div className="form-control">
-          <label className="input-group">
-            <span className="uppercase">width</span>
-            <input
-              type="number"
-              value={width}
-              className="input input-bordered input-lg"
-              min={MIN_BOARD_WIDTH}
-              max={MAX_BOARD_WIDTH}
-              onChange={(e) => setWidth(+e.target.value)}
-            />
-          </label>
+      <form className="h-full" onSubmit={handleSubmit(onSubmit)}>
+        <div className="flex flex-col gap-4 items-center">
+          <p className="text-xl">Grid dimensions</p>
+          <TextInput
+            name="boardWidth"
+            label="width"
+            control={control}
+            controllerProps={{
+              rules: {
+                required: true,
+                min: MIN_BOARD_WIDTH,
+                max: MAX_BOARD_WIDTH,
+              },
+            }}
+          />
+          <TextInput
+            name="boardHeight"
+            label="height"
+            control={control}
+            controllerProps={{
+              rules: {
+                required: true,
+                min: MIN_BOARD_HEIGHT,
+                max: MAX_BOARD_HEIGHT,
+                validate: () =>
+                  areBoardDimensionsValid(boardWidth, boardHeight),
+              },
+            }}
+          />
         </div>
-        <div className="form-control">
-          <label className="input-group">
-            <span className="uppercase">height</span>
-            <input
-              type="number"
-              value={height}
-              className="input input-bordered input-lg"
-              min={MIN_BOARD_HEIGHT}
-              max={MAX_BOARD_HEIGHT}
-              onChange={(e) => setHeight(+e.target.value)}
-            />
-          </label>
+        <div className="flex flex-col sm:flex-row gap-4 mt-8">
+          <Link href="/" className="btn btn-lg btn-outline text-xl btn-accent">
+            &#x2190; Back
+          </Link>
+          <button
+            type="submit"
+            disabled={!isValid || !isDirty}
+            className={`btn btn-lg text-xl btn-primary ${
+              isValid ? "" : "btn-disabled"
+            }`}
+          >
+            &#x2713; Save
+          </button>
         </div>
-      </div>
-      <div className="flex flex-col sm:flex-row gap-4">
-        <Link href="/" className="btn btn-lg btn-outline text-xl btn-accent">
-          &#x2190; Back
-        </Link>
-        <button onClick={onSubmit} className="btn btn-lg text-xl btn-primary">
-          &#x2713; Save
-        </button>
-      </div>
+      </form>
     </MainLayout>
   );
 }

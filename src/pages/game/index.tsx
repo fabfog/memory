@@ -1,17 +1,18 @@
+import { useRouter } from "next/router";
+import { useEffect } from "react";
 import {
+  DEFAULT_BOARD_HEIGHT,
+  DEFAULT_BOARD_WIDTH,
   LS_OPTIONS_HEIGHT_KEY,
   LS_OPTIONS_WIDTH_KEY,
 } from "@/modules/game/constants";
-import { getValidBoardHeight, getValidBoardWidth } from "@/modules/game/utils";
-import { useRouter } from "next/router";
-import { useEffect } from "react";
 
 export default function Game() {
-  const width = getValidBoardWidth(
-    +(localStorage.getItem(LS_OPTIONS_WIDTH_KEY) ?? 0)
+  const width = +(
+    localStorage.getItem(LS_OPTIONS_WIDTH_KEY) ?? DEFAULT_BOARD_WIDTH
   );
-  const height = getValidBoardHeight(
-    +(localStorage.getItem(LS_OPTIONS_HEIGHT_KEY) ?? 0)
+  const height = +(
+    localStorage.getItem(LS_OPTIONS_HEIGHT_KEY) ?? DEFAULT_BOARD_HEIGHT
   );
 
   const urlToRedirectTo = `/game/${width}/${height}`;
