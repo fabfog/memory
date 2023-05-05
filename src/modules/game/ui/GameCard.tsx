@@ -1,4 +1,3 @@
-import Image from "next/image";
 import { FC } from "react";
 
 import {
@@ -9,12 +8,15 @@ import {
 export interface GameCardProps {
   value: number;
   flipped: boolean;
+  disabled?: boolean;
 }
 
-export const GameCard: FC<GameCardProps> = ({ value, flipped }) => {
+export const GameCard: FC<GameCardProps> = ({ value, flipped, disabled }) => {
   return (
     <div
-      className="rounded-xl bg-gradient-to-b from-primary to-slate-400"
+      className={`rounded-xl bg-gradient-to-b from-primary to-slate-400 ${
+        disabled ? "opacity-50" : ""
+      }`}
       style={{
         width: DEFAULT_CARD_WIDTH,
         height: DEFAULT_CARD_HEIGHT,

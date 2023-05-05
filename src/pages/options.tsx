@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { useRouter } from "next/router";
 import { useCallback, useEffect } from "react";
 
 import {
@@ -11,7 +12,6 @@ import {
 } from "@/modules/game/constants";
 
 import { MainLayout } from "@/modules/common/ui/layouts/MainLayout";
-import { useRouter } from "next/router";
 import { areBoardDimensionsValid } from "@/modules/game/utils";
 import {
   GameOptionsForm,
@@ -19,7 +19,7 @@ import {
 } from "@/modules/game/hooks/useGameOptionsForm";
 import { TextInput } from "@/modules/common/ui/form/TextInput";
 
-export default function Home() {
+export default function Options() {
   const {
     watch,
     control,

@@ -1,18 +1,31 @@
 import { useRouter } from "next/router";
-import { CSSProperties, useEffect, useState } from "react";
+import { CSSProperties, useCallback, useEffect, useState } from "react";
 
 import { MainLayout } from "@/modules/common/ui/layouts/MainLayout";
 import { useGameStore } from "@/modules/game/store";
 import { GameCard } from "@/modules/game/ui/GameCard";
 import { useCountdown } from "@/modules/common/hooks/useCountdown";
 import { areBoardDimensionsValid } from "@/modules/game/utils";
+import Link from "next/link";
 
 export default function Game() {
   const router = useRouter();
   const { width, height } = router.query;
 
+  // Check board dimensions error
   const error = width && height && !areBoardDimensionsValid(+width, +height);
-  const { cells, reset, flipAll, flipCell } = useGameStore();
+
+  const {
+    cells,
+    moves,
+    isMoveCorrect,
+    isMoveComplete,
+    isGameComplete,
+    reset,
+    flipAll,
+    flipCell,
+    pickCard,
+  } = useGameStore();
 
   // sets board dimensions, initializing cells
   useEffect(() => {
@@ -21,31 +34,92 @@ export default function Game() {
     }
   }, [width, height, reset, error]);
 
-  const { start: startInitialCountdown, timeLeft: timeLeftToStart } =
-    useCountdown();
+  const { start: startCountdown, timeLeft: timeLeftToStart } = useCountdown();
 
   const isGameStarted = timeLeftToStart === 0;
 
-  // start initial timer after which all cards will be flipped
   useEffect(() => {
+    // force all cards to be visible
     flipAll(false);
-    startInitialCountdown(5);
-  }, [startInitialCountdown, flipAll]);
+    // start initial timer after which all cards will be flipped
+    startCountdown(5);
+  }, [startCountdown, flipAll]);
 
   // Flip all cards when initial timer reaches zero
   useEffect(() => {
     if (isGameStarted) {
-      setTimeout(() => {
-        flipAll(true);
-      }, 500);
+      flipAll(true);
     }
   }, [isGameStarted, flipAll]);
 
   // this flag is set true after the user has picked the wrong card
   const [isFlippingDisabled, setIsFlippingDisabled] = useState(false);
 
+  useEffect(() => {
+    const lastMove = moves.slice(-1)[0];
+    let timer: NodeJS.Timer;
+
+    if (lastMove && isMoveComplete(lastMove) && !isMoveCorrect(lastMove)) {
+      // disable flipping
+      setIsFlippingDisabled(true);
+
+      setTimeout(() => {
+        // revert move
+        if (lastMove?.pickedCard1 !== undefined)
+          flipCell(lastMove.pickedCard1, true);
+        if (lastMove?.pickedCard2 !== undefined)
+          flipCell(lastMove.pickedCard2, true);
+        // re-enable flipping
+        setIsFlippingDisabled(false);
+      }, 5000);
+    }
+    return () => {
+      clearTimeout(timer);
+    };
+    /**
+     * while excluding deps is generally not a good practice, in this particular case
+     * we can safely do so, because this hook only depends on moves. In fact, values
+     * inside cells never change, and the same goes for flipCell.
+     */
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [moves]);
+
+  const onClickCard = useCallback(
+    (value: number) => {
+      // this sets the card's value inside a move
+      pickCard(value);
+      // this flips the card on the board
+      flipCell(value);
+    },
+    [pickCard, flipCell]
+  );
+
   const canFlipCards = isGameStarted && !isFlippingDisabled;
   const shouldHideTimer = isGameStarted || error;
+
+  const hasCompletedGame = true || isGameComplete();
+  if (hasCompletedGame) {
+    return (
+      <MainLayout>
+        <h1 className="text-3xl uppercase mb-8">Congratulations!</h1>
+        <div className="flex flex-col justify-center items-center gap-6">
+          <h2 className="text-4xl">
+            You won the game in{" "}
+            <span className="font-bold">{moves.length} moves</span>!
+          </h2>
+          <button
+            className="btn btn-secondary btn-lg"
+            onClick={() => alert("well, this is not implemented...")}
+          >
+            Tell a friend!
+          </button>
+          <Link href="/" className="btn btn-md text-xl btn-primary">
+            &#x2190; Back to Home
+          </Link>
+        </div>
+      </MainLayout>
+    );
+  }
 
   return (
     <MainLayout>
@@ -54,19 +128,22 @@ export default function Game() {
           shouldHideTimer ? "invisible" : ""
         }`}
       >
-        <p className="text-xl">GET READY!</p>
+        <p className="text-xl uppercase">Get Ready!</p>
         <span className="countdown text-6xl">
-          {/* 
-          I added an explicit cast because TypeScript is not happy with --value
-          TODO: find a cleaner solution
-        */}
+          {/*
+            I added an explicit cast because TypeScript is not happy with --value
+            TODO: find a cleaner solution
+          */}
           <span style={{ "--value": timeLeftToStart } as CSSProperties} />
         </span>
       </div>
 
+      <div className={`${isFlippingDisabled ? "animate-pulse" : "invisible"}`}>
+        <p className="uppercase text-3xl">Wrong! Try again</p>
+      </div>
+
       {error && (
         <div className="sm:container alert alert-error shadow-lg">
-          {/* TODO add more specific error message here */}
           <span className="text-lg">Error! Could not start game.</span>
         </div>
       )}
@@ -81,11 +158,15 @@ export default function Game() {
         {cells.map((cell, i) => {
           return (
             <button
-              disabled={!canFlipCards}
               key={i}
-              onClick={() => flipCell(i)}
+              disabled={!canFlipCards}
+              onClick={() => onClickCard(i)}
             >
-              <GameCard value={cell.value} flipped={cell.flipped} />
+              <GameCard
+                value={cell.value}
+                flipped={cell.flipped}
+                disabled={isFlippingDisabled}
+              />
             </button>
           );
         })}
