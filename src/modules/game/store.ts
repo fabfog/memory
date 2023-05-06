@@ -45,6 +45,7 @@ export const createGameStore: StateCreator<GameSlice> = (set, get) => ({
       const pickedCard2Value = cells[move.pickedCard2].value;
 
       const isMoveCorrect = pickedCard1Value === pickedCard2Value;
+
       return isMoveCorrect;
     } else {
       return false;
@@ -96,7 +97,9 @@ export const createGameStore: StateCreator<GameSlice> = (set, get) => ({
       flipped: false,
     }));
 
-    set({ cells, moves: [] });
+    const newState: GameState = { cells, moves: [] };
+
+    set(newState);
   },
 });
 

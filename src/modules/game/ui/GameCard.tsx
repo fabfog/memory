@@ -12,12 +12,12 @@ export interface GameCardProps {
 }
 
 const cardsColors = [
-  "#332b94",
-  "#003ea6",
   "#09e708",
   "#e654ab",
+  "#0000ff",
   "#d8ef5d",
   "#2bf6bc",
+  "#ff0000",
 ];
 
 export const GameCard: FC<GameCardProps> = ({ value, flipped, disabled }) => {

@@ -1,5 +1,11 @@
 import { useRouter } from "next/router";
-import { CSSProperties, useCallback, useEffect, useState } from "react";
+import {
+  CSSProperties,
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
 
 import { MainLayout } from "@/modules/common/ui/layouts/MainLayout";
 import { useGameStore } from "@/modules/game/store";
@@ -55,6 +61,11 @@ export default function Game() {
 
   // this flag is set true after the user has picked the wrong card
   const [isFlippingDisabled, setIsFlippingDisabled] = useState(false);
+
+  const shouldShowWrongMoveError = useMemo(() => {
+    const lastMove = moves.slice(-1)[0];
+    return isFlippingDisabled && lastMove;
+  }, [moves, isFlippingDisabled]);
 
   useEffect(() => {
     const lastMove = moves.slice(-1)[0];
@@ -146,7 +157,11 @@ export default function Game() {
         </span>
       </div>
 
-      <div className={`${isFlippingDisabled ? "animate-pulse" : "invisible"}`}>
+      <div
+        className={`${
+          shouldShowWrongMoveError ? "animate-pulse" : "invisible"
+        }`}
+      >
         <p className="uppercase text-3xl">Wrong! Try again</p>
       </div>
 
