@@ -7,8 +7,6 @@ import {
   MAX_BOARD_WIDTH,
   MIN_BOARD_HEIGHT,
   MAX_BOARD_HEIGHT,
-  LS_OPTIONS_HEIGHT_KEY,
-  LS_OPTIONS_WIDTH_KEY,
 } from "@/modules/game/constants";
 
 import { MainLayout } from "@/modules/common/ui/layouts/MainLayout";
@@ -17,7 +15,11 @@ import {
   useGameOptionsForm,
 } from "@/modules/game/hooks/useGameOptionsForm";
 import { TextInput } from "@/modules/common/ui/form/TextInput";
-import { areBoardDimensionsValid } from "@/modules/game/utils";
+import {
+  areBoardDimensionsValid,
+  getSavedOptions,
+  saveOptions,
+} from "@/modules/game/utils";
 
 export default function Options() {
   const {
@@ -30,20 +32,16 @@ export default function Options() {
 
   // load previously saved values from localStorage
   useEffect(() => {
-    const savedWidth = localStorage.getItem(LS_OPTIONS_WIDTH_KEY);
-    const savedHeight = localStorage.getItem(LS_OPTIONS_HEIGHT_KEY);
-    if (savedWidth) setValue("boardWidth", +savedWidth);
-    if (savedHeight) setValue("boardHeight", +savedHeight);
+    const { boardWidth, boardHeight } = getSavedOptions();
+    if (boardWidth) setValue("boardWidth", +boardWidth);
+    if (boardHeight) setValue("boardHeight", +boardHeight);
   }, [setValue]);
 
   const router = useRouter();
 
   const onSubmit = useCallback(
-    ({ boardWidth, boardHeight }: GameOptionsForm) => {
-      // save options to localStorage
-      localStorage.setItem(LS_OPTIONS_WIDTH_KEY, boardWidth.toString());
-      localStorage.setItem(LS_OPTIONS_HEIGHT_KEY, boardHeight.toString());
-      // go back to main page
+    (options: GameOptionsForm) => {
+      saveOptions(options);
       router.push("/");
     },
     [router]
@@ -95,6 +93,7 @@ export default function Options() {
             </span>
           </div>
         </div>
+
         <div className="flex justify-center gap-4 mt-8">
           <Link href="/" className="btn btn-lg btn-outline text-xl btn-accent">
             &#x2190; Back

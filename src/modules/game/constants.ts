@@ -9,7 +9,4 @@ export const MAX_BOARD_WIDTH = 6;
 export const MIN_BOARD_HEIGHT = 2;
 export const MAX_BOARD_HEIGHT = 6;
 
-export const MAX_CARD_TYPES = 4;
-
-export const LS_OPTIONS_WIDTH_KEY = "preferredWidth";
-export const LS_OPTIONS_HEIGHT_KEY = "preferredHeight";
+export const LS_OPTIONS_KEY = "gameOptions";
