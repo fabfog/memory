@@ -106,7 +106,9 @@ export default function Game() {
   if (hasCompletedGame) {
     return (
       <MainLayout>
-        <h1 className="text-3xl uppercase mb-8">Congratulations!</h1>
+        <h1 className="text-xl uppercase mb-8 animate-bounce">
+          Congratulations!
+        </h1>
         <div className="flex flex-col justify-center items-center gap-8 mb-8">
           <Image
             src="https://placekitten.com/g/300/300"
@@ -115,9 +117,9 @@ export default function Game() {
             height={300}
             className="rounded-xl"
           />
-          <h2 className="text-4xl text-center">
-            You won the game in&nbsp;
-            <span className="font-bold text-5xl">{moves.length} moves!</span>
+          <h2 className="text-xl text-center flex flex-col gap-4 items-center">
+            <span>You won the game in</span>
+            <span className="font-bold text-6xl">{moves.length} moves!</span>
           </h2>
           <button
             className="btn btn-secondary btn-lg text-md"
@@ -150,10 +152,10 @@ export default function Game() {
 
       <div
         className={`${
-          shouldShowWrongMoveError ? "animate-pulse" : "invisible"
+          shouldShowWrongMoveError ? "animate-bounce" : "invisible"
         }`}
       >
-        <p className="uppercase text-3xl">Wrong! Try again</p>
+        <p className="uppercase text-xl">Wrong! Try again</p>
       </div>
 
       {error && (
@@ -185,7 +187,7 @@ export default function Game() {
           );
         })}
       </div>
-      <Link href="/" className="btn btn-lg btn-outline btn-accent text-xl my-8">
+      <Link href="/" className="btn btn-md btn-outline btn-accent text-xl my-8">
         &#x2190; Back
       </Link>
     </MainLayout>

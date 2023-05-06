@@ -9,6 +9,7 @@ export interface GameCardProps {
   value: number;
   flipped: boolean;
   disabled?: boolean;
+  className?: string;
 }
 
 const cardsColors = [
@@ -20,12 +21,19 @@ const cardsColors = [
   "#ff0000",
 ];
 
-export const GameCard: FC<GameCardProps> = ({ value, flipped, disabled }) => {
+export const GameCard: FC<GameCardProps> = ({
+  value,
+  flipped,
+  className,
+  disabled,
+}) => {
   return (
     <div
-      className={`rounded-xl bg-gradient-to-b border-4 border-slate-300 from-primary to-slate-800 w-16 h-24 sm:w-24 sm:h-36 ${
-        disabled ? "opacity-75" : ""
-      }`}
+      className={`
+        w-16 h-24 sm:w-24 sm:h-36
+        rounded-xl bg-gradient-to-b border-4 border-slate-400 from-primary to-slate-800 ${
+          disabled ? "opacity-75" : ""
+        } ${className ?? ""}`}
       data-test={value}
       style={{
         borderColor: !flipped

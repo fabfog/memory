@@ -20,6 +20,7 @@ import {
   getSavedOptions,
   saveOptions,
 } from "@/modules/game/utils";
+import { PawIcon } from "@/modules/common/ui/icons/PawIcon";
 
 export default function Options() {
   const {
@@ -56,7 +57,9 @@ export default function Options() {
 
   return (
     <MainLayout>
-      <h1 className="text-3xl uppercase mb-8">Options</h1>
+      <h1 className="text-xl uppercase mb-8 flex items-center">
+        <PawIcon className="fill-slate-300 mr-3" /> Options
+      </h1>
       <form className="h-full" onSubmit={handleSubmit(onSubmit)}>
         <div className="flex flex-col gap-4 items-center">
           <p className="text-lg">Grid dimensions</p>

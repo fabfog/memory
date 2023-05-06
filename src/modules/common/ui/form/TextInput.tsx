@@ -38,7 +38,7 @@ export function TextInput<T extends FieldValues>({
           <label className="input-group">
             <span className="uppercase">{label}</span>
             <input
-              className="input input-bordered input-lg"
+              className="input input-bordered input-lg text-lg"
               {...field}
               {...inputProps}
             />
