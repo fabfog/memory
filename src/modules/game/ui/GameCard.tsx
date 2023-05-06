@@ -23,13 +23,13 @@ const cardsColors = [
 export const GameCard: FC<GameCardProps> = ({ value, flipped, disabled }) => {
   return (
     <div
-      className={`rounded-xl bg-gradient-to-b from-primary to-slate-400 w-16 h-24 sm:w-24 sm:h-36 ${
+      className={`rounded-xl bg-gradient-to-b border-4 border-slate-300 from-primary to-slate-800 w-16 h-24 sm:w-24 sm:h-36 ${
         disabled ? "opacity-75" : ""
       }`}
       data-test={value}
       style={{
-        border: !flipped
-          ? `4px solid ${cardsColors[value % cardsColors.length]}`
+        borderColor: !flipped
+          ? cardsColors[value % cardsColors.length]
           : undefined,
         backgroundSize: "cover",
         backgroundImage: flipped

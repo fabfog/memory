@@ -71,7 +71,12 @@ export default function Game() {
     const lastMove = moves.slice(-1)[0];
     let timer: NodeJS.Timer;
 
-    if (lastMove && isMoveComplete(lastMove) && !isMoveCorrect(lastMove)) {
+    if (
+      isGameStarted &&
+      lastMove &&
+      isMoveComplete(lastMove) &&
+      !isMoveCorrect(lastMove)
+    ) {
       // disable flipping
       setIsFlippingDisabled(true);
 
@@ -90,11 +95,11 @@ export default function Game() {
     };
     /**
      * while excluding deps is generally not a good practice, in this particular case
-     * we can safely do so, because this hook only depends on moves. In fact, values
-     * inside cells never change, and the same goes for flipCell.
+     * we can safely do so, because this hook only depends on moves and isGameStarted.
+     * In fact, values inside cells never change, and the same goes for flipCell.
      */
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [moves]);
+  }, [moves, isGameStarted]);
 
   const onClickCard = useCallback(
     (value: number) => {
@@ -123,8 +128,8 @@ export default function Game() {
             className="rounded-xl"
           />
           <h2 className="text-4xl text-center">
-            You won the game in{" "}
-            <span className="font-bold">{moves.length} moves</span>!
+            You won the game in&nbsp;
+            <span className="font-bold text-5xl">{moves.length} moves!</span>
           </h2>
           <button
             className="btn btn-secondary btn-lg"
