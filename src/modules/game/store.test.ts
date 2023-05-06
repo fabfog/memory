@@ -76,7 +76,7 @@ describe("flipAll", () => {
   });
 });
 
-describe("flipCell", () => {
+describe("flipCard", () => {
   it("should flip single card", () => {
     const { result } = renderHook(() => useGameStore());
     act(() => {
@@ -85,7 +85,7 @@ describe("flipCell", () => {
     expect(result.current.cells.every((c) => !c.flipped)).toEqual(true);
 
     act(() => {
-      result.current.flipCell(0, true);
+      result.current.flipCard(0, true);
     });
     expect(result.current.cells[0]).toEqual({ value: 0, flipped: true });
   });

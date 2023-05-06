@@ -26,7 +26,7 @@ export interface GameActions {
     height: number,
     boardSetupStrategyFn?: BoardSetupStrategy
   ) => void;
-  flipCell: (i: number, flipped?: boolean) => void;
+  flipCard: (i: number, flipped?: boolean) => void;
   flipAll: (flipped: boolean) => void;
   pickCard: (value: number) => void;
   isMoveCorrect: (move: GameMove) => boolean;
@@ -89,7 +89,7 @@ export const createGameStore: StateCreator<GameSlice> = (set, get) => ({
       };
     });
   },
-  flipCell: (i, flipped) => {
+  flipCard: (i, flipped) => {
     return set((state) => ({
       ...state,
       cells: flipSingleCell(state.cells, i, flipped),

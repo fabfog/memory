@@ -1,19 +1,13 @@
 import { useRouter } from "next/router";
-import {
-  CSSProperties,
-  useCallback,
-  useEffect,
-  useMemo,
-  useState,
-} from "react";
+import Link from "next/link";
+import Image from "next/image";
+import { useCallback, useEffect, useMemo, useState } from "react";
 
 import { MainLayout } from "@/modules/common/ui/layouts/MainLayout";
 import { useGameStore } from "@/modules/game/store";
 import { GameCard } from "@/modules/game/ui/GameCard";
 import { useCountdown } from "@/modules/common/hooks/useCountdown";
 import { areBoardDimensionsValid } from "@/modules/game/utils";
-import Link from "next/link";
-import Image from "next/image";
 
 export default function Game() {
   const router = useRouter();
@@ -30,7 +24,7 @@ export default function Game() {
     isGameComplete,
     reset,
     flipAll,
-    flipCell,
+    flipCard,
     pickCard,
   } = useGameStore();
 
@@ -83,9 +77,9 @@ export default function Game() {
       setTimeout(() => {
         // revert move
         if (lastMove?.pickedCard1 !== undefined)
-          flipCell(lastMove.pickedCard1, true);
+          flipCard(lastMove.pickedCard1, true);
         if (lastMove?.pickedCard2 !== undefined)
-          flipCell(lastMove.pickedCard2, true);
+          flipCard(lastMove.pickedCard2, true);
         // re-enable flipping
         setIsFlippingDisabled(false);
       }, 5000);
@@ -96,18 +90,10 @@ export default function Game() {
     /**
      * while excluding deps is generally not a good practice, in this particular case
      * we can safely do so, because this hook only depends on moves and isGameStarted.
-     * In fact, values inside cells never change, and the same goes for flipCell.
+     * In fact, values inside cells never change, and the same goes for flipCard.
      */
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [moves, isGameStarted]);
-
-  const onClickCard = useCallback(
-    (value: number) => {
-      // this sets the card's value inside a move
-      pickCard(value);
-    },
-    [pickCard]
-  );
 
   const canFlipCards = isGameStarted && !isFlippingDisabled;
   const shouldHideTimer = isGameStarted || error;
@@ -152,11 +138,7 @@ export default function Game() {
       >
         <p className="text-xl uppercase">Get Ready!</p>
         <span className="countdown text-6xl">
-          {/*
-            I added an explicit cast because TypeScript is not happy with --value
-            TODO: find a cleaner solution
-          */}
-          <span style={{ "--value": timeLeftToStart } as CSSProperties} />
+          <span style={{ "--value": timeLeftToStart }} />
         </span>
       </div>
 
@@ -186,7 +168,7 @@ export default function Game() {
             <button
               key={i}
               disabled={!canFlipCards}
-              onClick={() => onClickCard(i)}
+              onClick={() => pickCard(i)}
             >
               <GameCard
                 value={cell.value}
