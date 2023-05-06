@@ -5,6 +5,15 @@ module.exports = {
     './src/modules/**/*.{js,ts,jsx,tsx,mdx}',
     './src/app/**/*.{js,ts,jsx,tsx,mdx}',
   ],
-  theme: {},
+  theme: {
+    extend: {
+      fontSize: {
+        sm: '1.25rem',
+        md: '1.75rem',
+        lg: '2rem',
+        xl: '2.5rem',
+      }
+    }
+  },
   plugins: [require("daisyui")],
 }

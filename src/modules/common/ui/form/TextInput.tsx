@@ -34,7 +34,7 @@ export function TextInput<T extends FieldValues>({
       control={control}
       name={name}
       render={({ field, fieldState: { error } }) => (
-        <div className="form-control">
+        <div className="form-control text-md">
           <label className="input-group">
             <span className="uppercase">{label}</span>
             <input

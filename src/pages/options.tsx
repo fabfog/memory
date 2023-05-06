@@ -59,7 +59,7 @@ export default function Options() {
       <h1 className="text-3xl uppercase mb-8">Options</h1>
       <form className="h-full" onSubmit={handleSubmit(onSubmit)}>
         <div className="flex flex-col gap-4 items-center">
-          <p className="text-xl">Grid dimensions</p>
+          <p className="text-lg">Grid dimensions</p>
           <TextInput
             name="boardWidth"
             label="width"
@@ -95,13 +95,13 @@ export default function Options() {
         </div>
 
         <div className="flex justify-center gap-4 mt-8">
-          <Link href="/" className="btn btn-lg btn-outline text-xl btn-accent">
+          <Link href="/" className="btn btn-lg btn-outline text-md btn-accent">
             &#x2190; Back
           </Link>
           <button
             type="submit"
             disabled={!isValid}
-            className={`btn btn-lg text-xl btn-primary ${
+            className={`btn btn-lg text-md btn-primary ${
               isValid ? "" : "btn-disabled"
             }`}
           >

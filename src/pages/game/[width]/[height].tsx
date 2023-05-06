@@ -13,6 +13,10 @@ export default function Game() {
   const router = useRouter();
   const { width, height } = router.query;
 
+  const onClickPlayAgain = useCallback(() => {
+    router.reload();
+  }, [router]);
+
   // Check board dimensions error
   const error = width && height && !areBoardDimensionsValid(+width, +height);
 
@@ -103,7 +107,7 @@ export default function Game() {
     return (
       <MainLayout>
         <h1 className="text-3xl uppercase mb-8">Congratulations!</h1>
-        <div className="flex flex-col justify-center items-center gap-8">
+        <div className="flex flex-col justify-center items-center gap-8 mb-8">
           <Image
             src="https://placekitten.com/g/300/300"
             alt="success"
@@ -116,12 +120,18 @@ export default function Game() {
             <span className="font-bold text-5xl">{moves.length} moves!</span>
           </h2>
           <button
-            className="btn btn-secondary btn-lg"
+            className="btn btn-secondary btn-lg text-md"
             onClick={() => alert("well, this is not implemented...")}
           >
-            Tell a friend!
+            &#10084; Tell a friend!
           </button>
-          <Link href="/" className="btn btn-md text-xl btn-primary">
+          <button
+            onClick={onClickPlayAgain}
+            className="btn btn-primary btn-lg text-md"
+          >
+            &#8634; Play again
+          </button>
+          <Link href="/" className="btn btn-md text-md btn-accent">
             &#x2190; Back to Home
           </Link>
         </div>
@@ -131,11 +141,7 @@ export default function Game() {
 
   return (
     <MainLayout>
-      <div
-        className={`font-mono text-center ${
-          shouldHideTimer ? "invisible" : ""
-        }`}
-      >
+      <div className={`text-center ${shouldHideTimer ? "invisible" : ""}`}>
         <p className="text-xl uppercase">Get Ready!</p>
         <span className="countdown text-6xl">
           <span style={{ "--value": timeLeftToStart }} />
@@ -179,7 +185,7 @@ export default function Game() {
           );
         })}
       </div>
-      <Link href="/" className="btn btn-lg btn-outline text-xl my-8">
+      <Link href="/" className="btn btn-lg btn-outline btn-accent text-xl my-8">
         &#x2190; Back
       </Link>
     </MainLayout>

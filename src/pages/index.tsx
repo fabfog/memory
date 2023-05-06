@@ -15,7 +15,7 @@ export default function Home() {
           ))}
         </div>
 
-        <Link href="/game" className="btn btn-lg text-xl btn-primary">
+        <Link href="/game" className="btn btn-lg text-lg btn-primary">
           &#9658; Play New Game
         </Link>
         <Link href="/options" className="btn btn-md text-lg btn-secondary mx-2">
