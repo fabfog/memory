@@ -15,8 +15,17 @@ export interface GameState {
   moves: GameMove[];
 }
 
+export type BoardSetupStrategy = (initialCells: number[]) => number[];
+
+const shuffleCells: BoardSetupStrategy = (initialCells) =>
+  initialCells.sort(() => (Math.random() > 0.5 ? 1 : -1));
+
 export interface GameActions {
-  reset: (width: number, height: number) => void;
+  reset: (
+    width: number,
+    height: number,
+    boardSetupStrategyFn?: BoardSetupStrategy
+  ) => void;
   flipCell: (i: number, flipped?: boolean) => void;
   flipAll: (flipped: boolean) => void;
   pickCard: (value: number) => void;
@@ -26,6 +35,12 @@ export interface GameActions {
 }
 
 export type GameSlice = GameState & GameActions;
+
+function flipSingleCell(cells: Cell[], i: number, flipped?: boolean): Cell[] {
+  const newCells = [...cells];
+  newCells[i].flipped = flipped ?? !newCells[i].flipped;
+  return newCells;
+}
 
 export const createGameStore: StateCreator<GameSlice> = (set, get) => ({
   cells: [],
@@ -52,18 +67,19 @@ export const createGameStore: StateCreator<GameSlice> = (set, get) => ({
     }
   },
   pickCard: (value: number) => {
-    const { moves } = get();
+    const { moves, cells } = get();
     const lastMove = moves.slice(-1)[0];
+    const newCells = flipSingleCell(cells, value, false);
 
+    const newMoves = [...moves];
     // If this is the first move, or if the last move was completed (two cards picked)
     if (!lastMove || lastMove.pickedCard2 !== undefined) {
-      set({ moves: moves.concat({ pickedCard1: value }) });
+      newMoves.push({ pickedCard1: value });
     } else {
       // if last move exists and it's not completed
-      const newMoves = [...moves];
       newMoves[newMoves.length - 1].pickedCard2 = value;
-      set({ moves: newMoves });
     }
+    set({ cells: newCells, moves: newMoves });
   },
   flipAll: (flipped: boolean) => {
     return set((state) => {
@@ -74,23 +90,21 @@ export const createGameStore: StateCreator<GameSlice> = (set, get) => ({
     });
   },
   flipCell: (i, flipped) => {
-    return set((state) => {
-      const newCells = [...state.cells];
-      newCells[i].flipped = flipped ?? !newCells[i].flipped;
-      return {
-        ...state,
-        cells: newCells,
-      };
-    });
+    return set((state) => ({
+      ...state,
+      cells: flipSingleCell(state.cells, i, flipped),
+    }));
   },
-  reset: (width, height) => {
+  reset: (width, height, boardSetupStrategyFn) => {
     const size = width * height;
     const maxCardValue = size / 2;
     const cardValues = new Array(maxCardValue).fill(0).map((_, i) => i);
 
-    const cellsValues = cardValues
-      .concat(cardValues) // obtain duplicates
-      .sort(() => (Math.random() > 0.5 ? 1 : -1)); // shuffle array randomly
+    // obtain duplicates
+    const initialCells = cardValues.concat(cardValues);
+
+    // mix values according to external strategy or shuffle (default)
+    const cellsValues = (boardSetupStrategyFn ?? shuffleCells)(initialCells);
 
     const cells: Cell[] = cellsValues.map((value) => ({
       value,

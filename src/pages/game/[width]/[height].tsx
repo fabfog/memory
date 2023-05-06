@@ -105,10 +105,8 @@ export default function Game() {
     (value: number) => {
       // this sets the card's value inside a move
       pickCard(value);
-      // this flips the card on the board
-      flipCell(value);
     },
-    [pickCard, flipCell]
+    [pickCard]
   );
 
   const canFlipCards = isGameStarted && !isFlippingDisabled;
