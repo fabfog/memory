@@ -30,7 +30,7 @@ export default function Success({ moves }: SuccessProps) {
           alt="success"
           width={300}
           height={300}
-          className="rounded-xl"
+          className="rounded-xl w-[200px] h-[200px] sm:w-[300px] sm:h-[300px]"
         />
         <h2 className="text-xl text-center flex flex-col gap-2 items-center">
           <span>{t("successMessageFirstLine")}</span>
