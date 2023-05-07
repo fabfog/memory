@@ -8,11 +8,20 @@ export function areBoardDimensionsValid(
   return (boardWidth * boardHeight) % 2 === 0;
 }
 
+export function isLocalStorageAvailable() {
+  return typeof window !== "undefined" && window.localStorage;
+}
+
 export function getSavedOptions() {
-  const savedOptions = localStorage.getItem(LS_OPTIONS_KEY) ?? "{}";
-  return JSON.parse(savedOptions);
+  if (isLocalStorageAvailable()) {
+    const savedOptions = localStorage.getItem(LS_OPTIONS_KEY) ?? "{}";
+    return JSON.parse(savedOptions);
+  }
+  return {};
 }
 
 export function saveOptions(options: GameOptionsForm) {
-  localStorage.setItem(LS_OPTIONS_KEY, JSON.stringify(options));
+  if (isLocalStorageAvailable()) {
+    localStorage.setItem(LS_OPTIONS_KEY, JSON.stringify(options));
+  }
 }
