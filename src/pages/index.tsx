@@ -20,7 +20,7 @@ export default function Home() {
 
   return (
     <MainLayout>
-      <div className="text-2xl mt-8 uppercase animate-bounce text-center mx-auto">
+      <div className="text-2xl mt-8 uppercase text-center mx-auto">
         Kitten Memory
       </div>
 
