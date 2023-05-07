@@ -18,3 +18,16 @@ export const MAX_BOARD_HEIGHT: number =
   +process.env.NEXT_PUBLIC_MAX_BOARD_HEIGHT!;
 
 export const LS_OPTIONS_KEY = process.env.NEXT_PUBLIC_LS_OPTIONS_KEY!;
+
+export const allowedGridDimensionsOptions: Array<{
+  w: number;
+  h: number;
+  isDefault?: true;
+}> = [
+  { w: 2, h: 2 },
+  { w: 2, h: 3 },
+  { w: 3, h: 4, isDefault: true },
+  { w: 4, h: 4 },
+  { w: 4, h: 5 },
+  { w: 5, h: 6 },
+];

@@ -1,4 +1,4 @@
-import { useForm } from "react-hook-form";
+import { UseFormProps, useForm } from "react-hook-form";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 
@@ -42,12 +42,15 @@ export const gameOptionsFormSchema = yup.object({
     }),
 });
 
-export const useGameOptionsForm = () => {
+export const useGameOptionsForm = (options?: UseFormProps<GameOptionsForm>) => {
+  const { defaultValues, ...rest } = options ?? {};
   return useForm<GameOptionsForm>({
     defaultValues: {
       boardWidth: DEFAULT_BOARD_WIDTH,
       boardHeight: DEFAULT_BOARD_HEIGHT,
+      ...defaultValues,
     },
     resolver: yupResolver(gameOptionsFormSchema),
+    ...rest,
   });
 };

@@ -12,10 +12,6 @@
   "shareCTA": "Dillo ai tuoi amici!",
   "playAgain": "Gioca di nuovo",
   "backToHome": "Torna alla Home",
-  "gridDimensions": "Dimensioni griglia",
-  "width": "larghezza",
-  "height": "altezza",
-  "language": "Lingua",
-  "bothOddErrorMessage": "Altezza e larghezza non possono essere entrambe dispari",
-  "save": "Salva"
+  "gridDimensions": "Dim. griglia",
+  "language": "Lingua"
 }
