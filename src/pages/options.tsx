@@ -58,7 +58,7 @@ export default function Options() {
   return (
     <MainLayout>
       <h1 className="text-xl uppercase mb-8 flex items-center">
-        <PawIcon className="fill-slate-300 mr-3" /> Options
+        <PawIcon className="fill-slate-300 mr-3 w-7 h-7" /> Options
       </h1>
       <form className="h-full" onSubmit={handleSubmit(onSubmit)}>
         <div className="flex flex-col gap-4 items-center">

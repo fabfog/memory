@@ -7,7 +7,7 @@ import { PawIcon } from "@/modules/common/ui/icons/PawIcon";
 export default function Home() {
   return (
     <MainLayout>
-      <div className="text-2xl mb-8 uppercase animate-bounce">
+      <div className="text-2xl mb-8 uppercase animate-bounce text-center mx-auto">
         Kitten Memory
       </div>
 
