@@ -35,7 +35,7 @@ export const GameCard: FC<GameCardProps> = ({
     >
       {flipped && (
         <div className="bg-gradient-to-b h-full from-primary to-slate-800 flex justify-center items-center">
-          <PawIcon className="w-16 h-16 fill-slate-400" />
+          <PawIcon className="w-10 sm:w-16 h-10 sm:h-16 fill-slate-400" />
         </div>
       )}
     </div>
