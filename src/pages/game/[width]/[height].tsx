@@ -111,7 +111,7 @@ export default function Game() {
         </h1>
         <div className="flex flex-col justify-center items-center gap-8 mb-8">
           <Image
-            src="https://placekitten.com/g/300/300"
+            src="https://placekitten.com/g/300/300?image=15"
             alt="success"
             width={300}
             height={300}
