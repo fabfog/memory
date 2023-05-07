@@ -11,19 +11,22 @@ import {
   MIN_BOARD_HEIGHT,
   MAX_BOARD_HEIGHT,
 } from "@/modules/game/constants";
-
 import { MainLayout } from "@/modules/common/ui/layouts/MainLayout";
 import {
   GameOptionsForm,
   useGameOptionsForm,
 } from "@/modules/game/hooks/useGameOptionsForm";
-import { TextInput } from "@/modules/common/ui/form/TextInput";
 import {
   areBoardDimensionsValid,
+  getIntegersInRange,
   getSavedOptions,
   saveOptions,
 } from "@/modules/game/utils";
 import { PawIcon } from "@/modules/common/ui/icons/PawIcon";
+import {
+  ControlledSelect,
+  ControlledSelectOption,
+} from "@/modules/common/ui/form/ControlledSelect";
 
 export const getServerSideProps: GetServerSideProps = async ({ locale }) => {
   return {
@@ -32,6 +35,28 @@ export const getServerSideProps: GetServerSideProps = async ({ locale }) => {
     },
   };
 };
+
+const widthOptions: ControlledSelectOption[] = getIntegersInRange(
+  MIN_BOARD_WIDTH,
+  MAX_BOARD_WIDTH
+).map((i) => {
+  const value = i.toString();
+  return {
+    value,
+    label: value,
+  };
+});
+
+const heightOptions: ControlledSelectOption[] = getIntegersInRange(
+  MIN_BOARD_HEIGHT,
+  MAX_BOARD_HEIGHT
+).map((i) => {
+  const value = i.toString();
+  return {
+    value,
+    label: value,
+  };
+});
 
 export default function Options() {
   const { t, i18n } = useTranslation();
@@ -100,27 +125,17 @@ export default function Options() {
 
         <div className="flex flex-col gap-4 items-center">
           <p className="text-lg">{t("gridDimensions")}</p>
-          <TextInput
+          <ControlledSelect
+            options={widthOptions}
             name="boardWidth"
             label={t("width")}
             control={control}
-            inputProps={{
-              required: true,
-              min: MIN_BOARD_WIDTH,
-              max: MAX_BOARD_WIDTH,
-              type: "number",
-            }}
           />
-          <TextInput
+          <ControlledSelect
+            options={heightOptions}
             name="boardHeight"
             label={t("height")}
             control={control}
-            inputProps={{
-              min: MIN_BOARD_HEIGHT,
-              max: MAX_BOARD_HEIGHT,
-              required: true,
-              type: "number",
-            }}
           />
 
           <div

@@ -25,3 +25,7 @@ export function saveOptions(options: GameOptionsForm) {
     localStorage.setItem(LS_OPTIONS_KEY, JSON.stringify(options));
   }
 }
+
+export function getIntegersInRange(from: number, to: number) {
+  return new Array(to - from + 1).fill(0).map((_, i) => i + from);
+}

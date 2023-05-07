@@ -1,4 +1,9 @@
-import { DetailedHTMLProps, HTMLAttributes, InputHTMLAttributes } from "react";
+import {
+  DetailedHTMLProps,
+  HTMLAttributes,
+  InputHTMLAttributes,
+  ReactNode,
+} from "react";
 import {
   Control,
   Controller,
@@ -7,12 +12,21 @@ import {
   Path,
 } from "react-hook-form";
 
-export interface TextInputProps<T extends FieldValues> {
+export interface ControlledSelectOption {
+  value: string;
+  label: ReactNode | string;
+  options?: Partial<
+    DetailedHTMLProps<HTMLAttributes<HTMLOptionElement>, HTMLOptionElement>
+  >;
+}
+
+export interface ControlledSelectProps<T extends FieldValues> {
   label: string;
   name: Path<T>;
   control: Control<T>;
+  options: ControlledSelectOption[];
   inputProps?: Partial<
-    DetailedHTMLProps<HTMLAttributes<HTMLInputElement>, HTMLInputElement>
+    DetailedHTMLProps<HTMLAttributes<HTMLSelectElement>, HTMLSelectElement>
   > &
     InputHTMLAttributes<HTMLInputElement>;
   controllerProps?: Omit<
@@ -21,13 +35,14 @@ export interface TextInputProps<T extends FieldValues> {
   >;
 }
 
-export function TextInput<T extends FieldValues>({
+export function ControlledSelect<T extends FieldValues>({
   control,
   label,
   name,
+  options,
   inputProps,
   controllerProps,
-}: TextInputProps<T>) {
+}: ControlledSelectProps<T>) {
   return (
     <Controller
       {...controllerProps}
@@ -37,11 +52,17 @@ export function TextInput<T extends FieldValues>({
         <div className="form-control text-md">
           <label className="input-group">
             <span className="uppercase">{label}</span>
-            <input
-              className="input input-bordered input-lg text-lg"
+            <select
+              className="select select-lg select-primary text-md"
               {...field}
               {...inputProps}
-            />
+            >
+              {options.map(({ value, label, options }) => (
+                <option key={value} {...options}>
+                  {label}
+                </option>
+              ))}
+            </select>
           </label>
           <label className="label">
             <span className="label-text-alt">{error?.message}</span>
