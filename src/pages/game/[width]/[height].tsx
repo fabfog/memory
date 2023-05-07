@@ -1,6 +1,9 @@
 import { useRouter } from "next/router";
 import Link from "next/link";
+import { GetServerSideProps } from "next";
+import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { useEffect, useMemo, useState } from "react";
+import { useTranslation } from "next-i18next";
 
 import { MainLayout } from "@/modules/common/ui/layouts/MainLayout";
 import { useGameStore } from "@/modules/game/store";
@@ -9,15 +12,18 @@ import { useCountdown } from "@/modules/common/hooks/useCountdown";
 import { areBoardDimensionsValid } from "@/modules/game/utils";
 import Success from "@/modules/game/containers/Success";
 
-export async function getServerSideProps() {
+export const getServerSideProps: GetServerSideProps = async ({ locale }) => {
   return {
-    props: {},
+    props: {
+      ...(locale ? await serverSideTranslations(locale, ["common"]) : {}),
+    },
   };
-}
+};
 
 export default function Game() {
   const router = useRouter();
   const { width, height } = router.query;
+  const { t } = useTranslation();
 
   // Check board dimensions error
   const error = width && height && !areBoardDimensionsValid(+width, +height);
@@ -111,7 +117,7 @@ export default function Game() {
   return (
     <MainLayout>
       <div className={`text-center mb-4 ${shouldHideTimer ? "invisible" : ""}`}>
-        <p className="text-xl uppercase">Get Ready!</p>
+        <p className="text-xl uppercase">{t("getReady")}</p>
         <span className="countdown text-6xl">
           <span style={{ "--value": timeLeftToStart }} />
         </span>
@@ -119,13 +125,13 @@ export default function Game() {
 
       <div className={`modal ${shouldShowWrongMoveError ? "modal-open" : ""}`}>
         <p className="uppercase animate-bounce text-xl my-8 mx-auto text-center">
-          Wrong! Try again
+          {t("wrongMoveErrorMessage")}
         </p>
       </div>
 
       {error && (
         <div className="sm:container alert alert-error shadow-lg">
-          <span className="text-lg">Error! Could not start game.</span>
+          <span className="text-lg">{t("boardDimensionsErrorMessage")}</span>
         </div>
       )}
       <div
@@ -155,7 +161,7 @@ export default function Game() {
         href="/"
         className="btn btn-sm btn-outline btn-secondary text-sm mt-6 mb-4"
       >
-        Exit game
+        {t("exitGame")}
       </Link>
     </MainLayout>
   );

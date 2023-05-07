@@ -1,10 +1,13 @@
-import { MainLayout } from "@/modules/common/ui/layouts/MainLayout";
 import Link from "next/link";
-
-import { GameCard } from "@/modules/game/ui/GameCard";
-import { PawIcon } from "@/modules/common/ui/icons/PawIcon";
 import { useState } from "react";
 import { useInterval } from "react-use";
+import { serverSideTranslations } from "next-i18next/serverSideTranslations";
+import { useTranslation } from "next-i18next";
+
+import { MainLayout } from "@/modules/common/ui/layouts/MainLayout";
+import { GameCard } from "@/modules/game/ui/GameCard";
+import { PawIcon } from "@/modules/common/ui/icons/PawIcon";
+import { GetStaticProps } from "next";
 
 const displayedCards = 4;
 
@@ -12,7 +15,17 @@ const displayedCards = 4;
 // simulates a "clockwise" flipping animation
 const cardsFlipIndexSequence = [0, 1, 3, 2];
 
+export const getStaticProps: GetStaticProps = async ({ locale }) => {
+  return {
+    props: {
+      ...(locale ? await serverSideTranslations(locale, ["common"]) : {}),
+    },
+  };
+};
+
 export default function Home() {
+  const { t } = useTranslation();
+
   const [flipIndex, setFlipIndex] = useState(0);
   useInterval(() => {
     setFlipIndex((i) => (i + 1) % displayedCards);
@@ -21,7 +34,7 @@ export default function Home() {
   return (
     <MainLayout>
       <div className="text-2xl mt-8 uppercase text-center mx-auto">
-        Kitten Memory
+        {t("appName")}
       </div>
 
       <div className="flex flex-col gap-4">
@@ -37,14 +50,11 @@ export default function Home() {
         </div>
 
         <Link href="/game" className="btn btn-lg text-lg btn-primary">
-          &#9658; Play New Game
+          &#9658; {t("playNewGame")}
         </Link>
-        <Link
-          href="/options"
-          className="btn btn-md text-lg btn-secondary mx-2 text-white"
-        >
-          <PawIcon className="fill-white mr-3" />
-          Options
+        <Link href="/options" className="btn btn-md text-lg btn-secondary mx-2">
+          <PawIcon className="mr-3" />
+          {t("options")}
         </Link>
       </div>
     </MainLayout>

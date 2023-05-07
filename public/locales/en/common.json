@@ -1,0 +1,21 @@
+{
+  "appName": "Kitten Memory",
+  "playNewGame": "Play New Game",
+  "options": "Options",
+  "getReady": "Get Ready!",
+  "wrongMoveErrorMessage": "Wrong! Try again",
+  "boardDimensionsErrorMessage": "Error: invalid board dimensions.",
+  "exitGame": "Exit Game",
+  "congratulations": "Congratulations",
+  "successMessageFirstLine": "You won the game in",
+  "successMessageSecondLine": "{{movesCount}} moves!",
+  "shareCTA": "Tell a friend!",
+  "playAgain": "Play again",
+  "backToHome": "Back to Home",
+  "gridDimensions": "Grid dimensions",
+  "width": "width",
+  "height": "height",
+  "language": "Language",
+  "bothOddErrorMessage": "Board width and height cannot be both odd",
+  "save": "Save"
+}

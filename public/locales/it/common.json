@@ -1,0 +1,21 @@
+{
+  "appName": "Kitten Memory",
+  "playNewGame": "Nuova partita",
+  "options": "Opzioni",
+  "getReady": "Preparati!",
+  "wrongMoveErrorMessage": "Mossa sbagliata! Riprova",
+  "boardDimensionsErrorMessage": "Errore: dimensioni griglia non valide.",
+  "exitGame": "Esci dal gioco",
+  "congratulations": "Congratulazioni",
+  "successMessageFirstLine": "Hai vinto la partita in",
+  "successMessageSecondLine": "{{movesCount}} mosse!",
+  "shareCTA": "Dillo ai tuoi amici!",
+  "playAgain": "Gioca di nuovo",
+  "backToHome": "Torna alla Home",
+  "gridDimensions": "Dimensioni griglia",
+  "width": "larghezza",
+  "height": "altezza",
+  "language": "Lingua",
+  "bothOddErrorMessage": "Altezza e larghezza non possono essere entrambe dispari",
+  "save": "Salva"
+}
