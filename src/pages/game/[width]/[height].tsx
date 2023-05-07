@@ -7,7 +7,7 @@ import { useGameStore } from "@/modules/game/store";
 import { GameCard } from "@/modules/game/ui/GameCard";
 import { useCountdown } from "@/modules/common/hooks/useCountdown";
 import { areBoardDimensionsValid } from "@/modules/game/utils";
-import { Success } from "./containers/Success";
+import Success from "@/modules/game/containers/Success";
 
 export async function getServerSideProps() {
   return {

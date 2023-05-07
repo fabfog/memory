@@ -9,7 +9,7 @@ export interface SuccessProps {
   moves: GameMove[];
 }
 
-export function Success({ moves }: SuccessProps) {
+export default function Success({ moves }: SuccessProps) {
   const router = useRouter();
 
   const onClickPlayAgain = useCallback(() => {
