@@ -22,6 +22,12 @@ import {
 } from "@/modules/game/utils";
 import { PawIcon } from "@/modules/common/ui/icons/PawIcon";
 
+export async function getServerSideProps() {
+  return {
+    props: {},
+  };
+}
+
 export default function Options() {
   const {
     control,

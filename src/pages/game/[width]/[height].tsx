@@ -9,6 +9,12 @@ import { GameCard } from "@/modules/game/ui/GameCard";
 import { useCountdown } from "@/modules/common/hooks/useCountdown";
 import { areBoardDimensionsValid } from "@/modules/game/utils";
 
+export async function getServerSideProps() {
+  return {
+    props: {},
+  };
+}
+
 export default function Game() {
   const router = useRouter();
   const { width, height } = router.query;

@@ -6,6 +6,12 @@ import {
 } from "@/modules/game/constants";
 import { getSavedOptions } from "@/modules/game/utils";
 
+export async function getServerSideProps() {
+  return {
+    props: {},
+  };
+}
+
 export default function Game() {
   const { boardWidth, boardHeight } = getSavedOptions();
   const width = +(boardWidth ?? DEFAULT_BOARD_WIDTH);
