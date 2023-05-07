@@ -5,13 +5,13 @@
   "getReady": "Get Ready!",
   "wrongMoveErrorMessage": "Wrong! Try again",
   "boardDimensionsErrorMessage": "Error: invalid board dimensions.",
-  "exitGame": "Exit Game",
+  "exitGame": "Quit Game",
   "congratulations": "Congratulations",
   "successMessageFirstLine": "You won the game in",
   "successMessageSecondLine": "{{movesCount}} moves!",
   "shareCTA": "Tell a friend!",
   "playAgain": "Play again",
   "backToHome": "Back to Home",
-  "gridDimensions": "Grid dimensions",
+  "gridDimensions": "Board dimensions",
   "language": "Language"
 }

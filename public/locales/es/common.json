@@ -1,0 +1,17 @@
+{
+  "appName": "Kitten Memory",
+  "playNewGame": "Nuevo juego",
+  "options": "Opciones",
+  "getReady": "¡Prepararse!",
+  "wrongMoveErrorMessage": "¡Equivocado! Intentar otra vez",
+  "boardDimensionsErrorMessage": "Error: dimensiones del tablero no válidas.",
+  "exitGame": "salir del juego",
+  "congratulations": "Felicidades",
+  "successMessageFirstLine": "¡Ganaste el juego en",
+  "successMessageSecondLine": "{{movesCount}} movimientos!",
+  "shareCTA": "¡Dile a tus amigos!",
+  "playAgain": "Juega de nuevo",
+  "backToHome": "Pagina principal",
+  "gridDimensions": "Dim. del tablero",
+  "language": "Idioma"
+}

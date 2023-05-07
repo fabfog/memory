@@ -90,10 +90,11 @@ export default function Options() {
             <select
               className="select select-lg select-primary text-md"
               onChange={onSelectLanguage}
-              defaultValue={i18n.language}
+              value={i18n.language}
             >
               <option value="it">🇮🇹 ITA</option>
               <option value="en">🇬🇧 ENG</option>
+              <option value="es">🇪🇸 ESP</option>
             </select>
           </label>
         </div>
@@ -101,7 +102,7 @@ export default function Options() {
         <div className="flex flex-col gap-4 items-center">
           <div className="form-control text-md">
             <label className="input-group">
-              <span className="uppercase">{t("gridDimensions")}</span>
+              <span className="uppercase truncate">{t("gridDimensions")}</span>
               <select
                 value={selectedDimensionsOptionIndex}
                 className="select select-lg select-primary text-md"
