@@ -2,7 +2,7 @@ This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next
 
 ## Getting Started
 
-First, rename env.sample into .env.local.
+First, rename `env.sample` into `.env.local`.
 
 Then, install node modules and run the development server:
 
