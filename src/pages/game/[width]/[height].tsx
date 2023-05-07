@@ -1,13 +1,13 @@
 import { useRouter } from "next/router";
 import Link from "next/link";
-import Image from "next/image";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 import { MainLayout } from "@/modules/common/ui/layouts/MainLayout";
 import { useGameStore } from "@/modules/game/store";
 import { GameCard } from "@/modules/game/ui/GameCard";
 import { useCountdown } from "@/modules/common/hooks/useCountdown";
 import { areBoardDimensionsValid } from "@/modules/game/utils";
+import { Success } from "./containers/Success";
 
 export async function getServerSideProps() {
   return {
@@ -18,10 +18,6 @@ export async function getServerSideProps() {
 export default function Game() {
   const router = useRouter();
   const { width, height } = router.query;
-
-  const onClickPlayAgain = useCallback(() => {
-    router.reload();
-  }, [router]);
 
   // Check board dimensions error
   const error = width && height && !areBoardDimensionsValid(+width, +height);
@@ -108,60 +104,23 @@ export default function Game() {
   const canFlipCards = isGameStarted && !isFlippingDisabled;
   const shouldHideTimer = isGameStarted || error;
 
-  const hasCompletedGame = isGameComplete();
-  if (hasCompletedGame) {
-    return (
-      <MainLayout>
-        <h1 className="text-xl uppercase mb-8 animate-bounce">
-          Congratulations!
-        </h1>
-        <div className="flex flex-col justify-center items-center gap-4 mb-8">
-          <Image
-            src="https://placekitten.com/g/300/300?image=15"
-            alt="success"
-            width={300}
-            height={300}
-            className="rounded-xl"
-          />
-          <h2 className="text-xl text-center flex flex-col gap-2 items-center">
-            <span>You won the game in</span>
-            <span className="font-bold text-6xl">{moves.length} moves!</span>
-          </h2>
-          <button
-            className="btn btn-secondary btn-lg text-md"
-            onClick={() => alert("well, this is not implemented...")}
-          >
-            &#10084; Tell a friend!
-          </button>
-          <button
-            onClick={onClickPlayAgain}
-            className="btn btn-primary btn-lg text-md"
-          >
-            &#8634; Play again
-          </button>
-          <Link href="/" className="btn btn-md text-md btn-accent">
-            &#x2190; Back to Home
-          </Link>
-        </div>
-      </MainLayout>
-    );
+  if (isGameComplete()) {
+    return <Success moves={moves} />;
   }
 
   return (
     <MainLayout>
-      <div className={`text-center ${shouldHideTimer ? "invisible" : ""}`}>
+      <div className={`text-center mb-4 ${shouldHideTimer ? "invisible" : ""}`}>
         <p className="text-xl uppercase">Get Ready!</p>
         <span className="countdown text-6xl">
           <span style={{ "--value": timeLeftToStart }} />
         </span>
       </div>
 
-      <div
-        className={`${
-          shouldShowWrongMoveError ? "animate-bounce" : "invisible"
-        }`}
-      >
-        <p className="uppercase text-xl">Wrong! Try again</p>
+      <div className={`modal ${shouldShowWrongMoveError ? "modal-open" : ""}`}>
+        <p className="uppercase animate-bounce text-xl my-8 mx-auto text-center">
+          Wrong! Try again
+        </p>
       </div>
 
       {error && (
@@ -171,7 +130,6 @@ export default function Game() {
       )}
       <div
         style={{
-          margin: "auto 0",
           display: "grid",
           gap: "1rem",
           gridTemplateColumns: `repeat(${width}, 1fr)`,

@@ -22,9 +22,9 @@ export const GameCard: FC<GameCardProps> = ({
   return (
     <div
       className={`
-        w-16 h-24 sm:w-24 sm:h-36
+        w-20 h-32 sm:w-24 h-36
         rounded-xl overflow-hidden bg-cover
-        ${flipped ? "border-4 border-slate-500" : ""}
+        ${flipped ? "border-4 border-primary" : ""}
         ${disabled ? "opacity-75" : ""}
         ${className ?? ""}`}
       style={{
@@ -34,8 +34,8 @@ export const GameCard: FC<GameCardProps> = ({
       }}
     >
       {flipped && (
-        <div className="bg-gradient-to-b h-full from-primary to-slate-800 flex justify-center items-center">
-          <PawIcon className="w-10 sm:w-16 h-10 sm:h-16 fill-slate-400" />
+        <div className="bg-gradient-to-br h-full from-secondary to-neutral flex justify-center items-center">
+          <PawIcon className="w-10 sm:w-16 h-10 sm:h-16 fill-primary" />
         </div>
       )}
     </div>
