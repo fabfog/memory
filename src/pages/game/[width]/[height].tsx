@@ -146,7 +146,7 @@ export default function Game() {
             <button
               key={i}
               disabled={!canFlipCards}
-              onClick={() => pickCard(i)}
+              onClick={() => cell.flipped && pickCard(i)}
             >
               <GameCard
                 value={cell.value}
